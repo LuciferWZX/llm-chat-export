@@ -578,12 +578,19 @@ impl App {
                 match result {
                     Ok(content) => {
                         let safe = sanitize_filename(title);
-                        let filename = if safe.is_empty() {
-                            format!("{}.md", &id[..8.min(id.len())])
+                        let base_name = if safe.is_empty() {
+                            id[..8.min(id.len())].to_string()
                         } else {
-                            format!("{}.md", safe)
+                            safe
                         };
-                        let path = format!("{}/{}", export_dir, filename);
+                        let mut filename = format!("{}.md", base_name);
+                        let mut path = format!("{}/{}", export_dir, filename);
+                        let mut counter = 1u32;
+                        while std::path::Path::new(&path).exists() {
+                            filename = format!("{}_{}.md", base_name, counter);
+                            path = format!("{}/{}", export_dir, filename);
+                            counter += 1;
+                        }
                         if let Err(e) = std::fs::write(&path, &content) {
                             let _ =
                                 tx.send(WorkerMsg::Error(format!("Write failed {}: {}", path, e)));
