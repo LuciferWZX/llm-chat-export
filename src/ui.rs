@@ -102,7 +102,7 @@ fn draw_platform_select(f: &mut Frame, app: &App, area: Rect) {
         .block(Block::default().borders(Borders::ALL));
     f.render_widget(title, chunks[0]);
 
-    let descs = [t.desc_chatgpt, t.desc_claude_web, t.desc_claude_code, t.desc_cursor];
+    let descs = [t.desc_chatgpt, t.desc_claude_web, t.desc_claude_code, t.desc_cursor, t.desc_manus];
     let items: Vec<ListItem> = app
         .platforms
         .iter()

@@ -26,6 +26,7 @@ pub enum PlatformKind {
     ClaudeWeb,
     ClaudeCode,
     Cursor,
+    Manus,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -111,6 +112,7 @@ impl App {
                 ("Claude Web", "Anthropic Claude.ai", "(Session Key)"),
                 ("Claude Code", "", ""),
                 ("Cursor", "", ""),
+                ("Manus", "", ""),
             ],
             platform_cursor: 0,
             platform: None,
@@ -235,10 +237,11 @@ impl App {
                     0 => PlatformKind::ChatGPT,
                     1 => PlatformKind::ClaudeWeb,
                     2 => PlatformKind::ClaudeCode,
-                    _ => PlatformKind::Cursor,
+                    3 => PlatformKind::Cursor,
+                    _ => PlatformKind::Manus,
                 };
                 self.platform = Some(kind);
-                if kind == PlatformKind::ClaudeCode || kind == PlatformKind::Cursor {
+                if kind == PlatformKind::ClaudeCode || kind == PlatformKind::Cursor || kind == PlatformKind::Manus {
                     self.screen = Screen::Filter;
                 } else {
                     self.token.clear();
@@ -279,7 +282,7 @@ impl App {
                 self.all_conversations.clear();
                 self.has_fetched = false;
                 match self.platform {
-                    Some(PlatformKind::ClaudeCode) | Some(PlatformKind::Cursor) => {
+                    Some(PlatformKind::ClaudeCode) | Some(PlatformKind::Cursor) | Some(PlatformKind::Manus) => {
                         self.screen = Screen::PlatformSelect;
                     }
                     _ => {
@@ -506,6 +509,7 @@ impl App {
                 PlatformKind::ClaudeWeb => platform::claude_web::fetch_conversations(&token),
                 PlatformKind::ClaudeCode => platform::claude_code::fetch_conversations(),
                 PlatformKind::Cursor => platform::cursor::fetch_conversations(),
+                PlatformKind::Manus => platform::manus::fetch_conversations(),
             };
             match result {
                 Ok(convs) => {
@@ -540,6 +544,7 @@ impl App {
             PlatformKind::ClaudeWeb => "claude-web",
             PlatformKind::ClaudeCode => "claude-code",
             PlatformKind::Cursor => "cursor",
+            PlatformKind::Manus => "manus",
         };
 
         thread::spawn(move || {
@@ -572,6 +577,9 @@ impl App {
                     }
                     PlatformKind::Cursor => {
                         platform::cursor::export_conversation(id, title)
+                    }
+                    PlatformKind::Manus => {
+                        platform::manus::export_conversation(id, title)
                     }
                 };
 

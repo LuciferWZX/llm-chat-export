@@ -14,6 +14,7 @@ pub struct Texts {
     pub desc_claude_web: &'static str,
     pub desc_claude_code: &'static str,
     pub desc_cursor: &'static str,
+    pub desc_manus: &'static str,
 
     // Token
     pub input_label: &'static str,
@@ -89,6 +90,7 @@ static ZH: Texts = Texts {
     desc_claude_web: "Anthropic Claude.ai (Session Key)",
     desc_claude_code: "本地 Claude Code 会话记录",
     desc_cursor: "本地 Cursor 编辑器会话记录",
+    desc_manus: "Manus AI 桌面版会话记录 (自动读取本地 Token)",
 
     input_label: "输入",
     token_label: " Token ",
@@ -149,6 +151,7 @@ static EN: Texts = Texts {
     desc_claude_web: "Anthropic Claude.ai (Session Key)",
     desc_claude_code: "Local Claude Code sessions",
     desc_cursor: "Local Cursor editor sessions",
+    desc_manus: "Manus AI desktop sessions (auto-reads local token)",
 
     input_label: "Input",
     token_label: " Token ",
